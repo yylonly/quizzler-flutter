@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'quiz_brain.dart';
 
 void main() => runApp(Quizzler());
+
+QuizBrain quizBrain = QuizBrain();
 
 class Quizzler extends StatelessWidget {
   @override
@@ -25,6 +28,9 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<Widget> scoreKeeper = [];
+  int questionIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,7 +43,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                quizBrain.questions[questionIndex].questionText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -62,6 +68,36 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked true.
+                setState(() {
+
+                  bool ans = quizBrain.questions[questionIndex].questionAnswer;
+
+                  if (ans == true) {
+                    print('user is correct');
+                    scoreKeeper.add(
+                      Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ),
+                    );
+                  } else {
+                    print('user is wrong');
+                    scoreKeeper.add(
+                      Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+
+                  if (questionIndex == quizBrain.questions.length) {
+                    questionIndex = 0;
+                  } else {
+                    questionIndex = questionIndex + 1;
+                  }
+
+
+                });
               },
             ),
           ),
@@ -80,11 +116,43 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
+                setState(() {
+
+                  bool ans = quizBrain.questions[questionIndex].questionAnswer;
+
+                  if (ans == false) {
+                    print('user is correct');
+                    scoreKeeper.add(
+                      Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ),
+                    );
+                  } else {
+                    print('user is wrong');
+                    scoreKeeper.add(
+                      Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+
+
+                  if (questionIndex == quizBrain.questions.length) {
+                    questionIndex = 0;
+                  } else {
+                    questionIndex = questionIndex + 1;
+                  }
+
+                });
               },
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        Row(
+          children: scoreKeeper,
+        )
       ],
     );
   }
